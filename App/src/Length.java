@@ -24,8 +24,16 @@ public class Length {
         return Math.round(value * unit.getConversionFactor() * 100.0) / 100.0;
     }
 
-    private boolean compare(Length other) {
-        return Double.compare(this.convertToBaseUnit(), other.convertToBaseUnit()) == 0;
+    private double convertFromBaseToTargetUnit(double lengthInInches, LengthUnit targetUnit) {
+        double converted = lengthInInches / targetUnit.getConversionFactor();
+        return Math.round(converted * 100.0) / 100.0;
+    }
+
+    public Length add(Length thatLength) {
+        if (thatLength == null) throw new IllegalArgumentException("Operand cannot be null");
+        double sumInBase = this.convertToBaseUnit() + thatLength.convertToBaseUnit();
+        double resultValue = convertFromBaseToTargetUnit(sumInBase, this.unit);
+        return new Length(resultValue, this.unit);
     }
 
     @Override
@@ -33,7 +41,7 @@ public class Length {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Length other = (Length) obj;
-        return compare(other);
+        return Double.compare(this.convertToBaseUnit(), other.convertToBaseUnit()) == 0;
     }
 
     @Override
@@ -47,14 +55,6 @@ public class Length {
         double converted = baseValue / targetUnit.getConversionFactor();
         double rounded = Math.round(converted * 100.0) / 100.0;
         return new Length(rounded, targetUnit);
-    }
-
-    public static double convert(double value, LengthUnit source, LengthUnit target) {
-        if (source == null || target == null) throw new IllegalArgumentException("Units cannot be null");
-        if (!Double.isFinite(value)) throw new IllegalArgumentException("Value must be finite");
-        double baseValue = value * source.getConversionFactor();
-        double converted = baseValue / target.getConversionFactor();
-        return Math.round(converted * 100.0) / 100.0;
     }
 
     @Override
