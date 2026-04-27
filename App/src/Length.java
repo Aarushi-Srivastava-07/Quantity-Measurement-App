@@ -36,6 +36,14 @@ public class Length {
         return new Length(resultValue, this.unit);
     }
 
+    public Length add(Length thatLength, LengthUnit targetUnit) {
+        if (thatLength == null) throw new IllegalArgumentException("Operand cannot be null");
+        if (targetUnit == null) throw new IllegalArgumentException("Target unit cannot be null");
+        double sumInBase = this.convertToBaseUnit() + thatLength.convertToBaseUnit();
+        double resultValue = convertFromBaseToTargetUnit(sumInBase, targetUnit);
+        return new Length(resultValue, targetUnit);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
