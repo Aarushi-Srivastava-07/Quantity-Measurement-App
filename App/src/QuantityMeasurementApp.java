@@ -1,47 +1,53 @@
 
 public class QuantityMeasurementApp {
 
-    public static boolean demonstrateLengthEquality(Length length1, Length length2) {
-        return length1.equals(length2);
+    // Weight functionality
+    public static boolean demonstrateWeightEquality(Weight w1, Weight w2) {
+        return w1.equals(w2);
     }
 
-    public static boolean demonstrateLengthComparison(double value1, LengthUnit unit1,
-                                                      double value2, LengthUnit unit2) {
-        Length l1 = new Length(value1, unit1);
-        Length l2 = new Length(value2, unit2);
-        return demonstrateLengthEquality(l1, l2);
+    public static boolean demonstrateWeightComparison(double value1, WeightUnit unit1,
+                                                      double value2, WeightUnit unit2) {
+        Weight w1 = new Weight(value1, unit1);
+        Weight w2 = new Weight(value2, unit2);
+        return demonstrateWeightEquality(w1, w2);
     }
 
-    public static Length demonstrateLengthConversion(double value, LengthUnit fromUnit, LengthUnit toUnit) {
-        return new Length(value, fromUnit).convertTo(toUnit);
+    public static Weight demonstrateWeightConversion(double value, WeightUnit fromUnit, WeightUnit toUnit) {
+        return new Weight(value, fromUnit).convertTo(toUnit);
     }
 
-    public static Length demonstrateLengthConversion(Length length, LengthUnit toUnit) {
-        return length.convertTo(toUnit);
+    public static Weight demonstrateWeightConversion(Weight weight, WeightUnit toUnit) {
+        return weight.convertTo(toUnit);
     }
 
-    public static Length demonstrateLengthAddition(Length length1, Length length2) {
-        return length1.add(length2);
+    public static Weight demonstrateWeightAddition(Weight w1, Weight w2) {
+        return w1.add(w2);
     }
 
-    public static Length demonstrateLengthAddition(Length length1, Length length2, LengthUnit targetUnit) {
-        return length1.add(length2, targetUnit);
+    public static Weight demonstrateWeightAddition(Weight w1, Weight w2, WeightUnit targetUnit) {
+        return w1.add(w2, targetUnit);
     }
 
     public static void main(String[] args) {
-        System.out.println(demonstrateLengthConversion(1.0, LengthUnit.FEET, LengthUnit.INCHES));
-        System.out.println(demonstrateLengthAddition(new Length(1.0, LengthUnit.FEET),
-                new Length(12.0, LengthUnit.INCHES),
-                LengthUnit.FEET));
-        System.out.println(new Length(36.0, LengthUnit.INCHES).equals(new Length(1.0, LengthUnit.YARDS)));
-        System.out.println(demonstrateLengthAddition(new Length(1.0, LengthUnit.YARDS),
-                new Length(3.0, LengthUnit.FEET),
-                LengthUnit.YARDS));
-        System.out.println(demonstrateLengthConversion(2.54, LengthUnit.CENTIMETERS, LengthUnit.INCHES));
-        System.out.println(demonstrateLengthAddition(new Length(5.0, LengthUnit.FEET),
-                new Length(0.0, LengthUnit.INCHES),
-                LengthUnit.FEET));
-        System.out.println(LengthUnit.FEET.convertToBaseUnit(12.0));
-        System.out.println(LengthUnit.INCHES.convertToBaseUnit(12.0));
+        // Equality
+        System.out.println(new Weight(1.0, WeightUnit.KILOGRAM)
+                .equals(new Weight(1000.0, WeightUnit.GRAM))); // true
+        System.out.println(new Weight(1.0, WeightUnit.KILOGRAM)
+                .equals(new Weight(2.20462, WeightUnit.POUND))); // true (approx)
+
+        // Conversion
+        System.out.println(demonstrateWeightConversion(1.0, WeightUnit.KILOGRAM, WeightUnit.GRAM)); // 1000 g
+        System.out.println(demonstrateWeightConversion(2.20462, WeightUnit.POUND, WeightUnit.KILOGRAM)); // ~1 kg
+
+        // Addition
+        System.out.println(demonstrateWeightAddition(
+                new Weight(1.0, WeightUnit.KILOGRAM),
+                new Weight(1000.0, WeightUnit.GRAM))); // 2.0 KILOGRAM
+
+        System.out.println(demonstrateWeightAddition(
+                new Weight(1.0, WeightUnit.KILOGRAM),
+                new Weight(1000.0, WeightUnit.GRAM),
+                WeightUnit.GRAM)); // 2000.0 GRAM
     }
 }
