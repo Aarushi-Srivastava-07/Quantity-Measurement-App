@@ -1,46 +1,53 @@
-import java.util.Scanner;
-
 public class QuantityMeasurementApp {
 
-    // Inner class to represent Feet measurement
     public static class Feet {
         private final double value;
-
-        public Feet(double value) {
-            this.value = value;
-        }
-
+        public Feet(double value) { this.value = value; }
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
-
             Feet other = (Feet) obj;
             return Double.compare(this.value, other.value) == 0;
         }
-
         @Override
-        public int hashCode() {
-            return Double.hashCode(value);
+        public int hashCode() { return Double.hashCode(value); }
+    }
+
+    public static class Inches {
+        private final double value;
+        public Inches(double value) { this.value = value; }
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (obj == null) return false;
+            if (getClass() != obj.getClass()) return false;
+            Inches other = (Inches) obj;
+            return Double.compare(this.value, other.value) == 0;
         }
+        @Override
+        public int hashCode() { return Double.hashCode(value); }
+    }
+
+    public static void demonstrateFeetEquality() {
+        Feet f1 = new Feet(1.0);
+        Feet f2 = new Feet(1.0);
+        Feet f3 = new Feet(2.0);
+        System.out.println("Feet 1.0 vs 1.0: " + f1.equals(f2));
+        System.out.println("Feet 1.0 vs 2.0: " + f1.equals(f3));
+    }
+
+    public static void demonstrateInchesEquality() {
+        Inches i1 = new Inches(1.0);
+        Inches i2 = new Inches(1.0);
+        Inches i3 = new Inches(2.0);
+        System.out.println("Inches 1.0 vs 1.0: " + i1.equals(i2));
+        System.out.println("Inches 1.0 vs 2.0: " + i1.equals(i3));
     }
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Enter first value in feet: ");
-        double firstValue = scanner.nextDouble();
-
-        System.out.print("Enter second value in feet: ");
-        double secondValue = scanner.nextDouble();
-
-        Feet feet1 = new Feet(firstValue);
-        Feet feet2 = new Feet(secondValue);
-
-        boolean result = feet1.equals(feet2);
-        System.out.println("Are the two values equal? " + result);
-
-        scanner.close();
+        demonstrateFeetEquality();
+        demonstrateInchesEquality();
     }
 }
