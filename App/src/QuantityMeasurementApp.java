@@ -1,46 +1,47 @@
+
 public class QuantityMeasurementApp {
 
-    public static boolean demonstrateLengthEquality(Length l1, Length l2) {
-        return l1.equals(l2);
+    public static boolean demonstrateLengthEquality(Length length1, Length length2) {
+        return length1.equals(length2);
     }
 
-    public static Length demonstrateLengthAddition(Length l1, Length l2) {
-        return l1.add(l2);
+    public static boolean demonstrateLengthComparison(double value1, LengthUnit unit1,
+                                                      double value2, LengthUnit unit2) {
+        Length l1 = new Length(value1, unit1);
+        Length l2 = new Length(value2, unit2);
+        return demonstrateLengthEquality(l1, l2);
     }
 
-    public static Length demonstrateLengthAddition(Length l1, Length l2, Length.LengthUnit targetUnit) {
-        return l1.add(l2, targetUnit);
+    public static Length demonstrateLengthConversion(double value, LengthUnit fromUnit, LengthUnit toUnit) {
+        return new Length(value, fromUnit).convertTo(toUnit);
+    }
+
+    public static Length demonstrateLengthConversion(Length length, LengthUnit toUnit) {
+        return length.convertTo(toUnit);
+    }
+
+    public static Length demonstrateLengthAddition(Length length1, Length length2) {
+        return length1.add(length2);
+    }
+
+    public static Length demonstrateLengthAddition(Length length1, Length length2, LengthUnit targetUnit) {
+        return length1.add(length2, targetUnit);
     }
 
     public static void main(String[] args) {
-        System.out.println(demonstrateLengthAddition(
-                new Length(1.0, Length.LengthUnit.FEET),
-                new Length(12.0, Length.LengthUnit.INCHES),
-                Length.LengthUnit.FEET
-        )); // 2.00 FEET
-
-        System.out.println(demonstrateLengthAddition(
-                new Length(1.0, Length.LengthUnit.FEET),
-                new Length(12.0, Length.LengthUnit.INCHES),
-                Length.LengthUnit.INCHES
-        )); // 24.00 INCHES
-
-        System.out.println(demonstrateLengthAddition(
-                new Length(1.0, Length.LengthUnit.FEET),
-                new Length(12.0, Length.LengthUnit.INCHES),
-                Length.LengthUnit.YARDS
-        )); // 0.67 YARDS
-
-        System.out.println(demonstrateLengthAddition(
-                new Length(36.0, Length.LengthUnit.INCHES),
-                new Length(1.0, Length.LengthUnit.YARDS),
-                Length.LengthUnit.FEET
-        )); // 6.00 FEET
-
-        System.out.println(demonstrateLengthAddition(
-                new Length(2.54, Length.LengthUnit.CENTIMETERS),
-                new Length(1.0, Length.LengthUnit.INCHES),
-                Length.LengthUnit.CENTIMETERS
-        )); // ~5.08 CENTIMETERS
+        System.out.println(demonstrateLengthConversion(1.0, LengthUnit.FEET, LengthUnit.INCHES));
+        System.out.println(demonstrateLengthAddition(new Length(1.0, LengthUnit.FEET),
+                new Length(12.0, LengthUnit.INCHES),
+                LengthUnit.FEET));
+        System.out.println(new Length(36.0, LengthUnit.INCHES).equals(new Length(1.0, LengthUnit.YARDS)));
+        System.out.println(demonstrateLengthAddition(new Length(1.0, LengthUnit.YARDS),
+                new Length(3.0, LengthUnit.FEET),
+                LengthUnit.YARDS));
+        System.out.println(demonstrateLengthConversion(2.54, LengthUnit.CENTIMETERS, LengthUnit.INCHES));
+        System.out.println(demonstrateLengthAddition(new Length(5.0, LengthUnit.FEET),
+                new Length(0.0, LengthUnit.INCHES),
+                LengthUnit.FEET));
+        System.out.println(LengthUnit.FEET.convertToBaseUnit(12.0));
+        System.out.println(LengthUnit.INCHES.convertToBaseUnit(12.0));
     }
 }
