@@ -1,53 +1,67 @@
 public class QuantityMeasurementApp {
 
-    public static class Feet {
+    public static class Length {
         private final double value;
-        public Feet(double value) { this.value = value; }
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (obj == null) return false;
-            if (getClass() != obj.getClass()) return false;
-            Feet other = (Feet) obj;
-            return Double.compare(this.value, other.value) == 0;
-        }
-        @Override
-        public int hashCode() { return Double.hashCode(value); }
-    }
+        private final LengthUnit unit;
 
-    public static class Inches {
-        private final double value;
-        public Inches(double value) { this.value = value; }
+        public enum LengthUnit {
+            FEET(12.0),
+            INCHES(1.0);
+
+            private final double conversionFactor;
+            LengthUnit(double conversionFactor) { this.conversionFactor = conversionFactor; }
+            public double getConversionFactor() { return conversionFactor; }
+        }
+
+        public Length(double value, LengthUnit unit) {
+            this.value = value;
+            this.unit = unit;
+        }
+
+        private double convertToBaseUnit() {
+            return value * unit.getConversionFactor();
+        }
+
+        public boolean compare(Length other) {
+            return Double.compare(this.convertToBaseUnit(), other.convertToBaseUnit()) == 0;
+        }
+
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
-            Inches other = (Inches) obj;
-            return Double.compare(this.value, other.value) == 0;
+            Length other = (Length) obj;
+            return compare(other);
         }
+
         @Override
-        public int hashCode() { return Double.hashCode(value); }
+        public int hashCode() {
+            return Double.hashCode(convertToBaseUnit());
+        }
     }
 
     public static void demonstrateFeetEquality() {
-        Feet f1 = new Feet(1.0);
-        Feet f2 = new Feet(1.0);
-        Feet f3 = new Feet(2.0);
-        System.out.println("Feet 1.0 vs 1.0: " + f1.equals(f2));
-        System.out.println("Feet 1.0 vs 2.0: " + f1.equals(f3));
+        Length l1 = new Length(1.0, Length.LengthUnit.FEET);
+        Length l2 = new Length(1.0, Length.LengthUnit.FEET);
+        System.out.println("Feet 1.0 vs 1.0: " + l1.equals(l2));
     }
 
     public static void demonstrateInchesEquality() {
-        Inches i1 = new Inches(1.0);
-        Inches i2 = new Inches(1.0);
-        Inches i3 = new Inches(2.0);
-        System.out.println("Inches 1.0 vs 1.0: " + i1.equals(i2));
-        System.out.println("Inches 1.0 vs 2.0: " + i1.equals(i3));
+        Length l1 = new Length(1.0, Length.LengthUnit.INCHES);
+        Length l2 = new Length(1.0, Length.LengthUnit.INCHES);
+        System.out.println("Inches 1.0 vs 1.0: " + l1.equals(l2));
+    }
+
+    public static void demonstrateFeetInchesComparison() {
+        Length l1 = new Length(1.0, Length.LengthUnit.FEET);
+        Length l2 = new Length(12.0, Length.LengthUnit.INCHES);
+        System.out.println("Feet 1.0 vs Inches 12.0: " + l1.equals(l2));
     }
 
     public static void main(String[] args) {
         demonstrateFeetEquality();
         demonstrateInchesEquality();
+        demonstrateFeetInchesComparison();
     }
 }
