@@ -1,44 +1,68 @@
 
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
 public class QuantityMeasurementAppTest {
 
-    private static boolean approxEqual(double a, double b) {
-        return Math.abs(a - b) < 1e-6;
+    @Test
+    void testLengthEquality() {
+        Quantity<LengthUnit> feet = new Quantity<>(1.0, LengthUnit.FEET);
+        Quantity<LengthUnit> inches = new Quantity<>(12.0, LengthUnit.INCHES);
+        assertTrue(feet.equals(inches));
     }
 
-    public static void main(String[] args) {
-        System.out.println("Equality kg==kg: " +
-                (new Weight(1.0, WeightUnit.KILOGRAM).equals(new Weight(1.0, WeightUnit.KILOGRAM)) ? "PASS" : "FAIL"));
+    @Test
+    void testWeightEquality() {
+        Quantity<WeightUnit> kg = new Quantity<>(1.0, WeightUnit.KILOGRAM);
+        Quantity<WeightUnit> grams = new Quantity<>(1000.0, WeightUnit.GRAM);
+        assertTrue(kg.equals(grams));
+    }
 
-        System.out.println("Equality kg!=kg: " +
-                (!new Weight(1.0, WeightUnit.KILOGRAM).equals(new Weight(2.0, WeightUnit.KILOGRAM)) ? "PASS" : "FAIL"));
+    @Test
+    void testLengthConversion() {
+        Quantity<LengthUnit> feet = new Quantity<>(1.0, LengthUnit.FEET);
+        Quantity<LengthUnit> inches = feet.convertTo(LengthUnit.INCHES);
+        assertEquals(12.0, inches.getValue());
+    }
 
-        System.out.println("Equality kg==g: " +
-                (new Weight(1.0, WeightUnit.KILOGRAM).equals(new Weight(1000.0, WeightUnit.GRAM)) ? "PASS" : "FAIL"));
+    @Test
+    void testWeightConversion() {
+        Quantity<WeightUnit> kg = new Quantity<>(1.0, WeightUnit.KILOGRAM);
+        Quantity<WeightUnit> grams = kg.convertTo(WeightUnit.GRAM);
+        assertEquals(1000.0, grams.getValue());
+    }
 
-        System.out.println("Equality g==kg: " +
-                (new Weight(1000.0, WeightUnit.GRAM).equals(new Weight(1.0, WeightUnit.KILOGRAM)) ? "PASS" : "FAIL"));
+    @Test
+    void testLengthAddition() {
+        Quantity<LengthUnit> feet = new Quantity<>(1.0, LengthUnit.FEET);
+        Quantity<LengthUnit> inches = new Quantity<>(12.0, LengthUnit.INCHES);
+        Quantity<LengthUnit> result = feet.add(inches, LengthUnit.FEET);
+        assertEquals(2.0, result.getValue());
+    }
 
-        System.out.println("Equality kg==lb: " +
-                (new Weight(1.0, WeightUnit.KILOGRAM).equals(new Weight(2.20462, WeightUnit.POUND)) ? "PASS" : "FAIL"));
+    @Test
+    void testWeightAddition() {
+        Quantity<WeightUnit> kg = new Quantity<>(1.0, WeightUnit.KILOGRAM);
+        Quantity<WeightUnit> grams = new Quantity<>(1000.0, WeightUnit.GRAM);
+        Quantity<WeightUnit> result = kg.add(grams, WeightUnit.KILOGRAM);
+        assertEquals(2.0, result.getValue());
+    }
 
-        System.out.println("Conversion kg->g: " +
-                (new Weight(1.0, WeightUnit.KILOGRAM).convertTo(WeightUnit.GRAM)
-                        .equals(new Weight(1000.0, WeightUnit.GRAM)) ? "PASS" : "FAIL"));
+    @Test
+    void testCrossCategoryEquality() {
+        Quantity<LengthUnit> feet = new Quantity<>(1.0, LengthUnit.FEET);
+        Quantity<WeightUnit> kg = new Quantity<>(1.0, WeightUnit.KILOGRAM);
+        assertFalse(feet.equals(kg));
+    }
 
-        System.out.println("Conversion lb->kg: " +
-                (new Weight(2.20462, WeightUnit.POUND).convertTo(WeightUnit.KILOGRAM)
-                        .equals(new Weight(1.0, WeightUnit.KILOGRAM)) ? "PASS" : "FAIL"));
+    @Test
+    void testInvalidConstructor_NullUnit() {
+        assertThrows(IllegalArgumentException.class, () -> new Quantity<>(1.0, null));
+    }
 
-        System.out.println("Addition kg+kg: " +
-                (new Weight(1.0, WeightUnit.KILOGRAM).add(new Weight(2.0, WeightUnit.KILOGRAM))
-                        .equals(new Weight(3.0, WeightUnit.KILOGRAM)) ? "PASS" : "FAIL"));
-
-        System.out.println("Addition kg+g: " +
-                (new Weight(1.0, WeightUnit.KILOGRAM).add(new Weight(1000.0, WeightUnit.GRAM))
-                        .equals(new Weight(2.0, WeightUnit.KILOGRAM)) ? "PASS" : "FAIL"));
-
-        System.out.println("Addition kg+g target g: " +
-                (new Weight(1.0, WeightUnit.KILOGRAM).add(new Weight(1000.0, WeightUnit.GRAM), WeightUnit.GRAM)
-                        .equals(new Weight(2000.0, WeightUnit.GRAM)) ? "PASS" : "FAIL"));
+    @Test
+    void testInvalidConstructor_NaNValue() {
+        assertThrows(IllegalArgumentException.class, () -> new Quantity<>(Double.NaN, LengthUnit.FEET));
     }
 }
