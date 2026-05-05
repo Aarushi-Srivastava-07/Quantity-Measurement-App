@@ -1,36 +1,22 @@
-
-
 public class QuantityMeasurementApp {
-
-    public static <U extends IMeasurable> void demonstrateEquality(Quantity<U> q1, Quantity<U> q2) {
-        System.out.println("Equality: " + q1 + " == " + q2 + " ? " + q1.equals(q2));
-    }
-
-    public static <U extends IMeasurable> void demonstrateConversion(Quantity<U> q, U targetUnit) {
-        System.out.println("Conversion: " + q + " -> " + q.convertTo(targetUnit));
-    }
-
-    public static <U extends IMeasurable> void demonstrateAddition(Quantity<U> q1, Quantity<U> q2, U targetUnit) {
-        System.out.println("Addition: " + q1 + " + " + q2 + " -> " + q1.add(q2, targetUnit));
-    }
-
     public static void main(String[] args) {
-        // Length examples
-        Quantity<LengthUnit> feet = new Quantity<>(1.0, LengthUnit.FEET);
-        Quantity<LengthUnit> inches = new Quantity<>(12.0, LengthUnit.INCHES);
-        demonstrateEquality(feet, inches);
-        demonstrateConversion(feet, LengthUnit.INCHES);
-        demonstrateAddition(feet, inches, LengthUnit.FEET);
+        Quantity<VolumeUnit> litre = new Quantity<>(1.0, VolumeUnit.LITRE);
+        Quantity<VolumeUnit> millilitre = new Quantity<>(1000.0, VolumeUnit.MILLILITRE);
+        Quantity<VolumeUnit> gallon = new Quantity<>(1.0, VolumeUnit.GALLON);
 
-        // Weight examples
-        Quantity<WeightUnit> kg = new Quantity<>(1.0, WeightUnit.KILOGRAM);
-        Quantity<WeightUnit> grams = new Quantity<>(1000.0, WeightUnit.GRAM);
-        demonstrateEquality(kg, grams);
-        demonstrateConversion(kg, WeightUnit.GRAM);
-        demonstrateAddition(kg, grams, WeightUnit.KILOGRAM);
+        // Equality
+        System.out.println("Equality:");
+        System.out.println(litre.equals(millilitre)); // true
+        System.out.println(litre.equals(gallon));     // true
 
-        // Cross-category prevention
-        Quantity<WeightUnit> pounds = new Quantity<>(2.0, WeightUnit.POUND);
-        System.out.println("Cross-category equals: " + feet.equals(pounds)); // false
+        // Conversion
+        System.out.println("\nConversion:");
+        System.out.println(litre.convertTo(VolumeUnit.MILLILITRE)); // 1000.0 mL
+        System.out.println(gallon.convertTo(VolumeUnit.LITRE));     // 3.78541 L
+
+        // Addition
+        System.out.println("\nAddition:");
+        System.out.println(litre.add(millilitre)); // 2.0 L
+        System.out.println(litre.add(gallon, VolumeUnit.MILLILITRE)); // 4785.41 mL
     }
 }

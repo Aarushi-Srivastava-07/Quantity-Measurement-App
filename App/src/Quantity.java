@@ -1,12 +1,10 @@
-
-
-public final class Quantity<U extends IMeasurable> {
+public class Quantity<U extends IMeasurable> {
     private final double value;
     private final U unit;
+    private static final double EPSILON = 1e-6;
 
     public Quantity(double value, U unit) {
         if (unit == null) throw new IllegalArgumentException("Unit cannot be null");
-        if (!Double.isFinite(value)) throw new IllegalArgumentException("Value must be finite");
         this.value = value;
         this.unit = unit;
     }
@@ -21,8 +19,8 @@ public final class Quantity<U extends IMeasurable> {
 
     public Quantity<U> convertTo(U targetUnit) {
         double baseValue = unit.convertToBaseUnit(value);
-        double converted = targetUnit.convertFromBaseUnit(baseValue);
-        return new Quantity<>(converted, targetUnit);
+        double convertedValue = targetUnit.convertFromBaseUnit(baseValue);
+        return new Quantity<>(convertedValue, targetUnit);
     }
 
     public Quantity<U> add(Quantity<U> other) {
@@ -30,23 +28,24 @@ public final class Quantity<U extends IMeasurable> {
     }
 
     public Quantity<U> add(Quantity<U> other, U targetUnit) {
-        if (!this.unit.getClass().equals(other.unit.getClass())) {
-            throw new IllegalArgumentException("Cannot add quantities of different categories");
-        }
-        double sumBase = this.unit.convertToBaseUnit(this.value) +
-                other.unit.convertToBaseUnit(other.value);
-        double result = targetUnit.convertFromBaseUnit(sumBase);
-        return new Quantity<>(result, targetUnit);
+        double baseValue1 = this.unit.convertToBaseUnit(this.value);
+        double baseValue2 = other.unit.convertToBaseUnit(other.value);
+        double sumBase = baseValue1 + baseValue2;
+        double resultValue = targetUnit.convertFromBaseUnit(sumBase);
+        return new Quantity<>(resultValue, targetUnit);
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof Quantity<?> other)) return false;
+        if (!(obj instanceof Quantity<?>)) return false;
+
+        Quantity<?> other = (Quantity<?>) obj;
         if (!this.unit.getClass().equals(other.unit.getClass())) return false;
-        double thisBase = this.unit.convertToBaseUnit(this.value);
-        double otherBase = other.unit.convertToBaseUnit(other.value);
-        return Double.compare(thisBase, otherBase) == 0;
+
+        double baseValue1 = this.unit.convertToBaseUnit(this.value);
+        double baseValue2 = other.unit.convertToBaseUnit(other.value);
+        return Math.abs(baseValue1 - baseValue2) < EPSILON;
     }
 
     @Override
@@ -56,6 +55,6 @@ public final class Quantity<U extends IMeasurable> {
 
     @Override
     public String toString() {
-        return "Quantity(" + value + ", " + unit.getUnitName() + ")";
+        return value + " " + unit.getUnitName();
     }
 }
