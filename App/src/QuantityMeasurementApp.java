@@ -1,22 +1,36 @@
 public class QuantityMeasurementApp {
+
     public static void main(String[] args) {
-        Quantity<VolumeUnit> litre = new Quantity<>(1.0, VolumeUnit.LITRE);
-        Quantity<VolumeUnit> millilitre = new Quantity<>(1000.0, VolumeUnit.MILLILITRE);
-        Quantity<VolumeUnit> gallon = new Quantity<>(1.0, VolumeUnit.GALLON);
+        System.out.println("---- SUBTRACTION ----");
 
-        // Equality
-        System.out.println("Equality:");
-        System.out.println(litre.equals(millilitre)); // true
-        System.out.println(litre.equals(gallon));     // true
+        Quantity<LengthUnit> length1 = new Quantity<>(10.0, LengthUnit.FEET);
+        Quantity<LengthUnit> length2 = new Quantity<>(6.0, LengthUnit.INCHES);
 
-        // Conversion
-        System.out.println("\nConversion:");
-        System.out.println(litre.convertTo(VolumeUnit.MILLILITRE)); // 1000.0 mL
-        System.out.println(gallon.convertTo(VolumeUnit.LITRE));     // 3.78541 L
+        System.out.println(length1.subtract(length2));
+        System.out.println(length1.subtract(length2, LengthUnit.INCHES));
 
-        // Addition
-        System.out.println("\nAddition:");
-        System.out.println(litre.add(millilitre)); // 2.0 L
-        System.out.println(litre.add(gallon, VolumeUnit.MILLILITRE)); // 4785.41 mL
+        Quantity<WeightUnit> weight1 = new Quantity<>(10.0, WeightUnit.KILOGRAM);
+        Quantity<WeightUnit> weight2 = new Quantity<>(5000.0, WeightUnit.GRAM);
+
+        System.out.println(weight1.subtract(weight2));
+
+        Quantity<VolumeUnit> volume1 = new Quantity<>(5.0, VolumeUnit.LITRE);
+        Quantity<VolumeUnit> volume2 = new Quantity<>(500.0, VolumeUnit.MILLILITRE);
+
+        System.out.println(volume1.subtract(volume2));
+        System.out.println(new Quantity<>(5.0, LengthUnit.FEET)
+                .subtract(new Quantity<>(10.0, LengthUnit.FEET)));
+
+        System.out.println(new Quantity<>(10.0, LengthUnit.FEET)
+                .divide(new Quantity<>(2.0, LengthUnit.FEET)));
+
+        System.out.println(new Quantity<>(24.0, LengthUnit.INCHES)
+                .divide(new Quantity<>(2.0, LengthUnit.FEET)));
+
+        System.out.println(new Quantity<>(10.0, WeightUnit.KILOGRAM)
+                .divide(new Quantity<>(5.0, WeightUnit.KILOGRAM)));
+
+        System.out.println(new Quantity<>(5.0, VolumeUnit.LITRE)
+                .divide(new Quantity<>(10.0, VolumeUnit.LITRE)));
     }
 }
