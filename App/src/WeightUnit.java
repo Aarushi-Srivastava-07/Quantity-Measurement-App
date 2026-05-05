@@ -1,10 +1,10 @@
-public enum VolumeUnit implements IMeasurable {
-    LITRE(1000.0),
-    MILLILITRE(1.0);
+public enum WeightUnit implements IMeasurable {
+    KILOGRAM(1000.0),
+    GRAM(1.0);
 
-    private final double toBaseFactor; // base = ml
+    private final double toBaseFactor; // base = gram
 
-    VolumeUnit(double factor) {
+    WeightUnit(double factor) {
         this.toBaseFactor = factor;
     }
 
